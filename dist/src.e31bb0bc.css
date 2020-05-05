@@ -139,6 +139,14 @@ html {
 body {
   background: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
 }
+h2 {
+  width: 100%;
+  margin: 2% auto;
+  border-bottom: 1px solid;
+  padding: 1%;
+  text-align: center;
+  font-size: 2.4rem;
+}
 .container {
   max-width: 800px;
   margin: 50px auto;

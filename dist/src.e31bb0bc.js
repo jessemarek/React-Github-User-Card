@@ -30299,9 +30299,11 @@ var App = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_GitHubCard.default, {
+      return /*#__PURE__*/_react.default.createElement("div", {
+        className: "container"
+      }, /*#__PURE__*/_react.default.createElement("h2", null, "My GitHub Data"), /*#__PURE__*/_react.default.createElement(_GitHubCard.default, {
         data: this.state.user
-      }), this.state.followers.map(function (f) {
+      }), /*#__PURE__*/_react.default.createElement("h2", null, "My GitHub Followers"), this.state.followers.map(function (f) {
         return /*#__PURE__*/_react.default.createElement(_GitHubCard.default, {
           key: f.id,
           data: f
@@ -30355,7 +30357,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51879" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55407" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
