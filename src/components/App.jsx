@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+
 import GitHubCard from './GitHubCard'
 import SearchForm from './SearchForm'
 
@@ -28,7 +29,7 @@ class App extends Component {
                     user: res.data
                 })
             })
-            .catch(err => console.log('ERROR: ', err))
+            .catch(err => console.log(err))
 
         //Get all of my followers and set the data into state
         axios.get(`${stopCORS}https://api.github.com/users/${this.state.username}/followers`)
@@ -43,11 +44,11 @@ class App extends Component {
                             })
 
                         })
-                        .catch(err => console.log('ERROR:', err))
+                        .catch(err => console.log(err))
                 })
             })
             .catch(err => {
-                console.log('Error: ', err)
+                console.log(err)
             })
     }
 
@@ -66,7 +67,7 @@ class App extends Component {
                         user: res.data
                     })
                 })
-                .catch(err => console.log('ERROR: ', err))
+                .catch(err => console.log(err))
 
             //Get all of new user's followers and set the data into state
             axios.get(`${stopCORS}https://api.github.com/users/${this.state.username}/followers`)
@@ -81,11 +82,11 @@ class App extends Component {
                                 })
 
                             })
-                            .catch(err => console.log('ERROR:', err))
+                            .catch(err => console.log(err))
                     })
                 })
                 .catch(err => {
-                    console.log('Error: ', err)
+                    console.log(err)
                 })
         }
     }
@@ -100,7 +101,7 @@ class App extends Component {
         return (
             <div className="container">
                 <SearchForm updateUser={this.updateUser} />
-                <h2>GitHub User Data</h2>
+                <h2>User's GitHub Data</h2>
                 <GitHubCard data={this.state.user} />
                 <h2>User's GitHub Followers</h2>
                 {
