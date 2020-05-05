@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import GitHubCard from './GitHubCard'
+import SearchForm from './SearchForm'
 
-import '../styles/styles.less'
-import Axios from 'axios'
+import '../styles/styles.css'
 
 class App extends Component {
     constructor() {
         super()
 
         this.state = {
+            username: 'jessemarek',
             user: {},
             followers: []
         }
@@ -18,7 +19,7 @@ class App extends Component {
     componentDidMount() {
         //Get my user info from API
         axios
-            .get(`https://api.github.com/users/jessemarek`)
+            .get(`https://api.github.com/users/${this.state.username}`)
             .then(res => {
                 this.setState({
                     user: res.data
@@ -27,7 +28,7 @@ class App extends Component {
             .catch(err => console.log('ERROR: ', err))
 
         //Get all of my followers and set the data into state
-        axios.get(`https://api.github.com/users/jessemarek/followers`)
+        axios.get(`https://api.github.com/users/${this.state.username}/followers`)
             .then(res => {
                 res.data.forEach(item => {
                     //request data for each follower
@@ -47,9 +48,22 @@ class App extends Component {
             })
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if(this.state.username !== prevState.username){
+            console.log(this.state.username)
+        }
+    }
+
+    updateUser = user =>{
+        this.setState({
+            username: user
+        })
+    }
+
     render() {
         return (
             <div className="container">
+                <SearchForm updateUser={this.updateUser} />
                 <h2>My GitHub Data</h2>
                 <GitHubCard data={this.state.user} />
                 <h2>My GitHub Followers</h2>
