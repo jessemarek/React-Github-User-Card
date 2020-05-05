@@ -30108,7 +30108,7 @@ var GitHubCard = /*#__PURE__*/function (_Component) {
         className: "name"
       }, this.props.data.name), /*#__PURE__*/_react.default.createElement("p", {
         className: "username"
-      }, this.props.data.username), /*#__PURE__*/_react.default.createElement("p", null, "Location: ", this.props.data.location), /*#__PURE__*/_react.default.createElement("p", null, "Profile:", /*#__PURE__*/_react.default.createElement("a", {
+      }, this.props.data.login), /*#__PURE__*/_react.default.createElement("p", null, "Location: ", this.props.data.location), /*#__PURE__*/_react.default.createElement("p", null, "Profile:", /*#__PURE__*/_react.default.createElement("a", {
         href: this.props.data.html_url
       }, this.props.data.html_url)), /*#__PURE__*/_react.default.createElement("p", null, "Followers: ", this.props.data.followers), /*#__PURE__*/_react.default.createElement("p", null, "Following: ", this.props.data.following), /*#__PURE__*/_react.default.createElement("p", null, "Bio: ", this.props.data.bio)));
     }
@@ -30215,6 +30215,18 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -30247,7 +30259,8 @@ var App = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this);
     _this.state = {
-      card: {}
+      user: {},
+      followers: []
     };
     return _this;
   }
@@ -30257,19 +30270,42 @@ var App = /*#__PURE__*/function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
+      //Get my user info from API
       _axios.default.get("https://api.github.com/users/jessemarek").then(function (res) {
         _this2.setState({
-          card: res.data
+          user: res.data
         });
       }).catch(function (err) {
         return console.log('ERROR: ', err);
+      }); //Get all of my followers and set the data into state
+
+
+      _axios.default.get("https://api.github.com/users/jessemarek/followers").then(function (res) {
+        res.data.forEach(function (item) {
+          //request data for each follower
+          _axios.default.get("".concat(item.url)).then(function (res) {
+            //Add the follower data to state
+            _this2.setState({
+              followers: [].concat(_toConsumableArray(_this2.state.followers), [res.data])
+            });
+          }).catch(function (err) {
+            return console.log('ERROR:', err);
+          });
+        });
+      }).catch(function (err) {
+        console.log('Error: ', err);
       });
     }
   }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_GitHubCard.default, {
-        data: this.state.card
+        data: this.state.user
+      }), this.state.followers.map(function (f) {
+        return /*#__PURE__*/_react.default.createElement(_GitHubCard.default, {
+          key: f.id,
+          data: f
+        });
       }));
     }
   }]);

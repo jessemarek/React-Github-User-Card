@@ -6,29 +6,54 @@ import '../styles/styles.less'
 import Axios from 'axios'
 
 class App extends Component {
-    constructor(){
+    constructor() {
         super()
 
         this.state = {
-            card: {}
+            user: {},
+            followers: []
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
+        //Get my user info from API
         axios
             .get(`https://api.github.com/users/jessemarek`)
             .then(res => {
                 this.setState({
-                    card: res.data
+                    user: res.data
                 })
             })
             .catch(err => console.log('ERROR: ', err))
+
+        //Get all of my followers and set the data into state
+        axios.get(`https://api.github.com/users/jessemarek/followers`)
+            .then(res => {
+                res.data.forEach(item => {
+                    //request data for each follower
+                    axios.get(`${item.url}`)
+                        .then(res => {
+                            //Add the follower data to state
+                            this.setState({
+                                followers: [...this.state.followers, res.data]
+                            })
+                            
+                        })
+                        .catch(err => console.log('ERROR:', err))
+                })
+            })
+            .catch(err => {
+                console.log('Error: ', err)
+            })
     }
 
     render() {
         return (
             <div>
-                <GitHubCard data={this.state.card} />    
+                <GitHubCard data={this.state.user} />
+                {
+                    this.state.followers.map(f => <GitHubCard key={f.id} data={f} />)
+                }
             </div>
         )
     }
