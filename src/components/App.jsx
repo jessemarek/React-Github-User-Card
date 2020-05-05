@@ -1,16 +1,17 @@
-import React from 'react'
+import React, { Component } from 'react'
 import GitHubCard from './GitHubCard'
 
 import '../styles/styles.less'
 
-const App = () => {
+class App extends Component {
 
-    return(
-        <div>
-            <h1>Start Here</h1>
-            <GitHubCard />
-        </div>
-    )
+    render() {
+        return (
+            <div>
+                <GitHubCard />
+            </div>
+        )
+    }
 }
 
 export default App
