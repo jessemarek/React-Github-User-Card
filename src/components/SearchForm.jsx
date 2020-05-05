@@ -9,13 +9,13 @@ class SearchForm extends Component {
         }
     }
 
-    inputHandler = e =>{
+    inputHandler = e => {
         this.setState({
             formValue: e.target.value
         })
     }
 
-    submitHandler = e =>{
+    submitHandler = e => {
         e.preventDefault()
         this.props.updateUser(this.state.formValue)
 
@@ -27,11 +27,12 @@ class SearchForm extends Component {
     render() {
         return (
             <form onSubmit={this.submitHandler}>
-                <input
-                    type="text"
-                    onChange={this.inputHandler}
-                    value={this.state.formValue}
-                />
+                    <input
+                        type="text"
+                        onChange={this.inputHandler}
+                        value={this.state.formValue}
+                        placeholder="Search by Username"
+                    />
                 <button>Search</button>
             </form>
         )
